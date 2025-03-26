@@ -1,3 +1,4 @@
+#!/bin/python3
 import os
 
 fileTypes = {}
@@ -30,26 +31,19 @@ def convert_bytes(bytes):
     return size
 
 
-def files_names():
-    for root, dirs, files in os.walk('.'):
-        for name in files:
-            print(os.path.join(root, name))
-        for name in dirs:
-            print(os.path.join(root, name))
-
-
-def files_size():
-    print(f'Directory: {os.getcwd()}\n')
-    for root, dirs, files in os.walk('.'):
+def files_size(path):
+    print(f'Directory: {path}\n')
+    for root, dirs, files in os.walk(path):
         for name in files:
             path = os.path.join(root, name)
-            f_type = os.path.splitext(name)[1]
-            if f_type == '':
-                continue
-            elif f_type not in fileTypes:
-                fileTypes[f_type] = os.path.getsize(path)
-            else:
-                fileTypes[f_type] += os.path.getsize(path)
+            f_type = os.path.splitext(name)[-1]
+            if os.path.exists(path):
+                if f_type == '':
+                    continue
+                elif f_type not in fileTypes:
+                    fileTypes[f_type] = os.path.getsize(path)
+                else:
+                    fileTypes[f_type] += os.path.getsize(path)
 
     print('Type\tSize')
     total_size = 0
@@ -60,5 +54,7 @@ def files_size():
 
 
 if __name__ == '__main__':
-    files_size()
+    from sys import argv
+    files_size(argv[1])
     input('\nPress enter to continue...')
+
